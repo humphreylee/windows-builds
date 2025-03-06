@@ -37,16 +37,12 @@ jobs:
         with:
           toolchain: nightly
           override: true
-          target: wasm32-wasip1
+          target: x86_64-pc-windows-gnu
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: "zing -> target"
-
-      - name: Setup rustflags
-        shell: pwsh
-        run: ./Parse-Rustflags.ps1
 
       - name: Build release
         working-directory: zing
