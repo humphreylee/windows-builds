@@ -73,8 +73,8 @@ jobs:
       - name: Create release directories and zip
         run: |
           mkdir -p zing-release
-          mv artifacts/zing/zing.exe zing/
-          zip -r zing-windows.zip zing/*
+          mv artifacts/zing.exe zing-release/
+          zip -r zing-windows.zip zing-release/*
 
       - name: Upload release build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
