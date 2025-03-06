@@ -2,24 +2,10 @@ name: Build Zing Nightly
 
 on:
   push:
-  #schedule:
-  #  - cron: "0 0 * * *" # Runs every night at midnight UTC
-  #workflow_dispatch:
-  #pull_request:
 
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        backend: [vulkan, opengl]
-        include:
-          - backend: vulkan
-            artifact_name: zing-release
-            rustflags: ""
-          - backend: opengl
-            artifact_name: zing-release-opengl
-            rustflags: "--cfg gles"
 
     steps:
       - name: Enable long paths in Git
@@ -56,12 +42,11 @@ jobs:
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.backend }}
           workspaces: "zing -> target"
 
       - name: Setup rustflags
         shell: pwsh
-        run: ./Parse-Rustflags.ps1 ${{ matrix.rustflags }}
+        run: ./Parse-Rustflags.ps1
 
       - name: Build release
         working-directory: zing
@@ -70,7 +55,6 @@ jobs:
       - name: Archive build
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}
           path: zing/target/release/zing.exe
 
   release:
@@ -92,11 +76,9 @@ jobs:
 
       - name: Create release directories and zip
         run: |
-          mkdir -p zing-release zing-release-opengl
+          mkdir -p zing-release
           mv artifacts/zing-release/zing.exe zing-release/
-          mv artifacts/zing-release-opengl/zing.exe zing-release-opengl/
           zip -r zing-windows.zip zing-release/*
-          zip -r zing-windows-opengl.zip zing-release-opengl/*
 
       - name: Upload release build artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -107,4 +89,3 @@ jobs:
           make_latest: true
           files: |
             zing-windows.zip
-            zing-windows-opengl.zip
