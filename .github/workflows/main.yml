@@ -56,10 +56,10 @@ jobs:
         id: date
         run: echo "CURRENT_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
-     - name: Create release directories and zip
-       run: |
-         mkdir -p zing-release
-         mv artifacts/zing.zip zing-release/
+     #- name: Create release directories and zip
+     #  run: |
+     #    mkdir -p zing-release
+     #    mv artifacts/zing.zip zing-release/
          
     - name: Upload release binaries
       uses: softprops/action-gh-release@v2
