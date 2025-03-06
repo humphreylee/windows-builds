@@ -31,6 +31,7 @@ jobs:
       run: |
         mkdir -p artifacts
         zip artifacts/zing.zip target/x86_64-pc-windows-gnu/release/zing.exe
+  
     - name: Upload artifact
       uses: actions/upload-artifact@main
       with:
@@ -40,6 +41,9 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
 
     steps:
       - name: Download release artifacts
