@@ -1,7 +1,7 @@
 name: Build Zing Nightly
 
 on:
-  push_request:
+  push:
 
 jobs:
   build:
