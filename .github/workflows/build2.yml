@@ -1,0 +1,42 @@
+# https://rakhim.exotext.com/how-to-build-and-publish-multi-platform-rust-binaries
+name: Build Zing Nightly Ver 2
+
+on:
+  push:
+  
+jobs:
+  linux_windows:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+          with:
+          repository: sukeesh/zing
+          ref: main
+
+    - name: Install Linux and Windows Cross Compilers
+      run: sudo apt-get install --yes --no-install-recommends musl-tools gcc-mingw-w64-x86-64-win32
+
+    - name: Install rustup targets
+      run: rustup target add x86_64-unknown-linux-musl x86_64-pc-windows-gnu
+
+    - name: Build the executable
+      run: cargo build --release --target x86_64-unknown-linux-musl --target x86_64-pc-windows-gnu
+
+    - name: Tar x86_64 binary
+      run: tar -czvf zing-gnu-linux-x86_64.tar.gz -C target/x86_64-unknown-linux-musl/release zing
+
+    - name: Zip windows binary
+      run: zip -j zing-windows.zip target/x86_64-pc-windows-gnu/release/zing.exe
+
+    - name: Generate SHA256 checksums
+      run: |
+        shasum -a 256 zing-gnu-linux-x86_64.tar.gz > zing-gnu-linux-x86_64.tar.gz.sha256
+        shasum -a 256 zing-windows.zip > zing-windows.zip.sha256
+
+    - name: Upload release binaries
+      uses: alexellis/upload-assets@0.4.0
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        asset_paths: '["zing-gnu-linux-x86_64.tar.gz", "zing-windows.zip", "zing-gnu-linux-x86_64.tar.gz.sha256", "zing-windows.zip.sha256"]'
