@@ -2,7 +2,7 @@
 name: Build Zing Nightly
 
 on:
-  push:
+  #push:
 
 jobs:
   build:
