@@ -1,3 +1,4 @@
+# https://rakhim.exotext.com/how-to-build-and-publish-multi-platform-rust-binaries
 name: Build Zing Nightly
 
 on:
@@ -55,17 +56,24 @@ jobs:
         id: date
         run: echo "CURRENT_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
-     # - name: Create release directories and zip
-     #   run: |
-     #     mkdir -p zing-release
-     #     mv artifacts/zing.zip zing-release/
+     - name: Create release directories and zip
+       run: |
+         mkdir -p zing-release
+         mv artifacts/zing.zip zing-release/
          
-      - name: Upload release build artifacts to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: ${{ env.CURRENT_DATE }}
-          tag_name: ${{ env.CURRENT_DATE }}
-          draft: false
-          make_latest: true
-          files: |
-            zing.zip
+    - name: Upload release binaries
+      uses: softprops/action-gh-release@v2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        asset_paths: '["artifacts/zing.zip"]'
+        
+     # - name: Upload release build artifacts to GitHub Release
+     #   uses: softprops/action-gh-release@v2
+     #   with:
+     #     name: ${{ env.CURRENT_DATE }}
+     #     tag_name: ${{ env.CURRENT_DATE }}
+     #     draft: false
+     #     make_latest: true
+     #     files: |
+     #       zing.zip
