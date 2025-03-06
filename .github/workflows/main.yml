@@ -2,6 +2,7 @@
 name: Build Zing Nightly
 
 on:
+  pull_request:
   #push:
 
 jobs:
