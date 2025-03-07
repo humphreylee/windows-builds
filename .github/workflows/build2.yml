@@ -3,7 +3,6 @@ name: Build Zing Nightly Ver 2
 
 on:
   pull_request:
-  #push:
   
 jobs:
   linux_windows:
