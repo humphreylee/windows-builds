@@ -53,6 +53,10 @@ jobs:
         with:
           path: zing/target/release/zing.exe
 
+    - name: List build directory contents
+      working-directory: zing/target/release
+      run: ls -la
+  
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -66,6 +70,9 @@ jobs:
         with:
           path: artifacts
 
+      - name: List artifacts directory contents
+        run: ls -la artifacts
+  
       - name: Get the current date
         id: date
         run: echo "CURRENT_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
