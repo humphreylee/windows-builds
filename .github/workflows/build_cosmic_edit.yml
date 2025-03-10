@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: pop-os/cosmic-edit
-          ref: main
+          ref: master
           path: cosmic-edit
 
       - name: Install rust nightly
