@@ -1,7 +1,8 @@
 name: Build Zing Nightly
 
 on:
-  push:
+  workflow_dispatch:
+  #push:
 
 jobs:
   build:
